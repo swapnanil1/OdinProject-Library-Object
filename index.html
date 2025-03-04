@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="input-section">
+      <div>
+        <label for="bookTitle">Title:</label>
+        <input type="text" id="bookTitle" name="bookTitle" /><br /><br />
+
+        <label for="bookAuthor">Author:</label>
+        <input type="text" id="bookAuthor" name="bookAuthor" /><br /><br />
+      </div>
+      <div>
+        <label for="bookPages">Pages</label>
+        <input type="number" name="bookPages" id="bookPages" />
+        <label for="bookReadingStatus">Completed</label>
+        <input
+          type="checkbox"
+          name="bookReadingStatus"
+          id="bookReadingStatus"
+        />
+      </div>
+
+      <button
+        type="button"
+        onclick="addBookToLibrary(
+        document.getElementById('bookTitle').value,
+        document.getElementById('bookAuthor').value,
+        document.getElementById('bookPages').value,
+        document.getElementById('bookReadingStatus').checked
+      )"
+      >
+        Add to library
+      </button>
+    </div>
+    <div class="books-grid"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

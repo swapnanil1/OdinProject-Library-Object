@@ -1,0 +1,29 @@
+body {
+  height: 98vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-section {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.input-section label {
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-section input {
+  margin-bottom: 10px;
+}
+
+.books-grid {
+  text-align: center;
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 5px;
+  padding: 10px;
+  width: 100%;
+}
