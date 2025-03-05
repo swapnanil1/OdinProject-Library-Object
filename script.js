@@ -1,10 +1,11 @@
 const library = [];
 
-function Book(title, author, pages, read) {
+function Book(title, author, pages, read, uuid) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
+  this.uuid = uuid;
   this.info = function () {
     const readStatus = this.read ? "Reading Completed" : "Not read yet";
     return `${title} by ${author}, ${pages} pages , ${readStatus}`;
@@ -12,7 +13,8 @@ function Book(title, author, pages, read) {
 }
 
 function addBookToLibrary(title, author, pages, read) {
-  library.push(new Book(title, author, pages, read));
+  const uuid = self.crypto.randomUUID();
+  library.push(new Book(title, author, pages, read, uuid));
   displayLibrary();
 }
 
@@ -41,11 +43,18 @@ function displayLibrary() {
       library.splice(i, 1);
       displayLibrary();
     });
+    const toggleReadStatus = document.createElement("button");
+    toggleReadStatus.textContent = "Toggle Read Status";
+    toggleReadStatus.addEventListener("click", () => {
+      book.read ? (book.read = false) : (book.read = true);
+      displayLibrary();
+    });
     bookCard.appendChild(titleElement);
     bookCard.appendChild(authorElement);
     bookCard.appendChild(pagesElement);
     bookCard.appendChild(readingStatusElement);
     bookCard.appendChild(removeBookButton);
+    bookCard.appendChild(toggleReadStatus);
     booksGrid.appendChild(bookCard);
   }
 }
