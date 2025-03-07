@@ -5,20 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Library</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="input-section">
       <div>
         <h1>Old West Library</h1>
+      </div>
+      <div class="book-input-form">
         <label for="bookTitle">Title:</label>
         <input type="text" id="bookTitle" name="bookTitle" /><br /><br />
 
-        <label for="bookAuthor">Author:</label>
+        <label for="bookAuthor">By:</label>
         <input type="text" id="bookAuthor" name="bookAuthor" /><br /><br />
-      </div>
-      <div>
+
         <label for="bookPages">Pages</label>
         <input type="number" name="bookPages" id="bookPages" />
+
         <label for="bookReadingStatus">Completed</label>
         <input
           type="checkbox"
@@ -28,7 +36,7 @@
       </div>
 
       <button
-        type="button"
+        type="btn"
         onclick="addBookToLibrary(
         document.getElementById('bookTitle').value,
         document.getElementById('bookAuthor').value,
@@ -39,9 +47,11 @@
         Add to library
       </button>
     </div>
+
     <div class="books-grid">
       <h1>Books List</h1>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>
