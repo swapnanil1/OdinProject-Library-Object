@@ -1,10 +1,11 @@
 const library = [];
 
-function Book(title, author, pages, read, uuid) {
+function Book(title, author, pages, read, url, uuid) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
+  this.url = url;
   this.uuid = uuid;
   this.info = function () {
     const readStatus = this.read ? "Reading Completed" : "Not read yet";
@@ -12,13 +13,37 @@ function Book(title, author, pages, read, uuid) {
   };
 }
 
-function addBookToLibrary(title, author, pages, read) {
+function addBookToLibrary(title, author, pages, read, coverurl) {
+  let validatedCoverUrl = coverurl;
+
+  if (coverurl !== "") {
+    if (!isValidURL(coverurl)) {
+      alert(
+        "Invalid Book Cover URL. Please enter a valid URL (e.g., http://example.com)"
+      );
+      return;
+    }
+    validatedCoverUrl = coverurl;
+  } else {
+    validatedCoverUrl = "";
+  }
+
   const uuid = self.crypto.randomUUID();
-  library.push(new Book(title, author, pages, read, uuid));
+  library.push(new Book(title, author, pages, read, validatedCoverUrl, uuid));
   displayLibrary();
 }
 
+function isValidURL(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 function displayLibrary() {
+  console.log("displayLibrary called");
   const booksGrid = document.querySelector(".books-grid");
   booksGrid.innerHTML = "";
 
@@ -81,5 +106,11 @@ function createToggleReadButton(book) {
   return toggleReadStatusButton;
 }
 
-addBookToLibrary("Merchant of venice", "William Shakespeare", 304, true);
-addBookToLibrary("Rich Dad Poor Dad", "Robert T. Kiyosak", 336, true);
+addBookToLibrary("Merchant of venice", "William Shakespeare", 304, true, "");
+addBookToLibrary("Rich Dad Poor Dad", "Robert T. Kiyosak", 336, true, "");
+
+document
+  .getElementById("bookForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+  });

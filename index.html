@@ -8,46 +8,69 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <div class="input-section">
-      <div>
-        <h1>Old West Library</h1>
-      </div>
-      <div class="book-input-form">
-        <label for="bookTitle">Title:</label>
-        <input type="text" id="bookTitle" name="bookTitle" /><br /><br />
+      <form id="bookForm">
+        <div>
+          <h1>Old West Library</h1>
+        </div>
+        <div class="book-input-form">
+          <label for="bookTitle">Title:</label>
+          <input
+            type="text"
+            id="bookTitle"
+            name="bookTitle"
+            placeholder="Enter book title"
+          /><br /><br />
 
-        <label for="bookAuthor">By:</label>
-        <input type="text" id="bookAuthor" name="bookAuthor" /><br /><br />
+          <label for="bookAuthor">By:</label>
+          <input
+            type="text"
+            id="bookAuthor"
+            name="bookAuthor"
+            placeholder="Enter book author"
+          /><br /><br />
 
-        <label for="bookPages">Pages</label>
-        <input type="number" name="bookPages" id="bookPages" />
+          <label for="bookPages">Pages</label>
+          <input
+            type="number"
+            name="bookPages"
+            id="bookPages"
+            placeholder="Number of pages"
+          />
+          <label for="book-cover-url">Cover Image</label>
+          <input
+            type="url"
+            name="book-cover-url"
+            id="book-cover-url"
+            placeholder="No image"
+          />
+          <label for="bookReadingStatus">Completed</label>
+          <input
+            type="checkbox"
+            name="bookReadingStatus"
+            id="bookReadingStatus"
+          />
+        </div>
 
-        <label for="bookReadingStatus">Completed</label>
-        <input
-          type="checkbox"
-          name="bookReadingStatus"
-          id="bookReadingStatus"
-        />
-      </div>
-
-      <button
-        type="btn"
-        onclick="addBookToLibrary(
+        <button
+          type="button"
+          onclick="addBookToLibrary(
         document.getElementById('bookTitle').value,
         document.getElementById('bookAuthor').value,
         document.getElementById('bookPages').value,
-        document.getElementById('bookReadingStatus').checked
+        document.getElementById('bookReadingStatus').checked,
+        document.getElementById('book-cover-url').value
       )"
-      >
-        Add to library
-      </button>
+        >
+          Add to library
+        </button>
+      </form>
     </div>
-
     <div class="books-grid">
       <h1>Books List</h1>
     </div>
