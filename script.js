@@ -43,7 +43,6 @@ function isValidURL(url) {
 }
 
 function displayLibrary() {
-  console.log("displayLibrary called");
   const booksGrid = document.querySelector(".books-grid");
   booksGrid.innerHTML = "";
 
@@ -57,6 +56,8 @@ function displayLibrary() {
 function createBookCard(book, index) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book-card");
+
+  updateBookCardStyle(book, bookCard);
 
   const titleElement = document.createElement("h3");
   titleElement.textContent = book.title;
@@ -76,6 +77,9 @@ function createBookCard(book, index) {
 
   const toggleReadStatusButton = createToggleReadButton(book);
 
+  const removeCoverButton = createRemoveCoverButton(book, bookCard);
+  bookCard.appendChild(removeCoverButton);
+
   bookCard.appendChild(titleElement);
   bookCard.appendChild(authorElement);
   bookCard.appendChild(pagesElement);
@@ -84,6 +88,20 @@ function createBookCard(book, index) {
   bookCard.appendChild(toggleReadStatusButton);
 
   return bookCard;
+}
+
+function updateBookCardStyle(book, bookCard) {
+  if (book.url) {
+    bookCard.style.backgroundImage = `url(${book.url})`;
+    bookCard.style.backgroundSize = "cover";
+    bookCard.style.backgroundRepeat = "no-repeat";
+    bookCard.style.backgroundPosition = "center";
+    bookCard.style.minHeight = "200px";
+  } else {
+    bookCard.style.backgroundImage = "";
+    bookCard.style.backgroundColor = "#ddd";
+    bookCard.style.minHeight = "200px";
+  }
 }
 
 function createRemoveButton(index) {
@@ -106,11 +124,56 @@ function createToggleReadButton(book) {
   return toggleReadStatusButton;
 }
 
-addBookToLibrary("Merchant of venice", "William Shakespeare", 304, true, "");
-addBookToLibrary("Rich Dad Poor Dad", "Robert T. Kiyosak", 336, true, "");
+function createRemoveCoverButton(book, bookCard) {
+  const removeCoverButton = document.createElement("button");
+  removeCoverButton.textContent = "Toggle Cover";
+
+  removeCoverButton.addEventListener("click", () => {
+    if (book.url) {
+      book.originalUrl = book.url;
+      book.url = "";
+    } else {
+      book.url = book.originalUrl || "";
+      delete book.originalUrl;
+    }
+
+    updateBookCardStyle(book, bookCard);
+    displayLibrary();
+  });
+
+  return removeCoverButton;
+}
 
 document
   .getElementById("bookForm")
   .addEventListener("submit", function (event) {
     event.preventDefault();
+    const title = document.getElementById("bookTitle").value;
+    const author = document.getElementById("bookAuthor").value;
+    const pages = document.getElementById("bookPages").value;
+    const read = document.getElementById("bookReadingStatus").checked;
+    const coverUrl = document.getElementById("book-cover-url").value;
+
+    addBookToLibrary(title, author, pages, read, coverUrl);
+
+    document.getElementById("bookTitle").value = "";
+    document.getElementById("bookAuthor").value = "";
+    document.getElementById("bookPages").value = "";
+    document.getElementById("bookReadingStatus").checked = false;
+    document.getElementById("book-cover-url").value = "";
   });
+
+addBookToLibrary(
+  "Merchant of venice",
+  "William Shakespeare",
+  304,
+  true,
+  "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781625589507/the-merchant-of-venice-9781625589507_hr.jpg"
+);
+addBookToLibrary(
+  "Rich Dad Poor Dad",
+  "Robert T. Kiyosak",
+  336,
+  true,
+  "https://m.media-amazon.com/images/I/51Hfv2MfNGL._SY445_SX342_.jpg"
+);
