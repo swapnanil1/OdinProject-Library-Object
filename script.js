@@ -1,5 +1,31 @@
 const library = [];
 
+// Function to validate URL format
+function isValidURL(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+// Function to update the book card style based on cover image URL
+function updateBookCardStyle(book, bookCard) {
+  if (book.url) {
+    bookCard.style.backgroundImage = `url(${book.url})`;
+    bookCard.style.backgroundSize = "cover";
+    bookCard.style.backgroundRepeat = "no-repeat";
+    bookCard.style.backgroundPosition = "center";
+    bookCard.style.minHeight = "200px";
+  } else {
+    bookCard.style.backgroundImage = "";
+    bookCard.style.backgroundColor = "#ddd";
+    bookCard.style.minHeight = "200px";
+  }
+}
+
+// Factory Function to create a Book object
 function Book(title, author, pages, read, url, uuid) {
   this.title = title;
   this.author = author;
@@ -13,46 +39,7 @@ function Book(title, author, pages, read, url, uuid) {
   };
 }
 
-function addBookToLibrary(title, author, pages, read, coverurl) {
-  let validatedCoverUrl = coverurl;
-
-  if (coverurl !== "") {
-    if (!isValidURL(coverurl)) {
-      alert(
-        "Invalid Book Cover URL. Please enter a valid URL (e.g., http://example.com)"
-      );
-      return;
-    }
-    validatedCoverUrl = coverurl;
-  } else {
-    validatedCoverUrl = "";
-  }
-
-  const uuid = self.crypto.randomUUID();
-  library.push(new Book(title, author, pages, read, validatedCoverUrl, uuid));
-  displayLibrary();
-}
-
-function isValidURL(url) {
-  try {
-    new URL(url);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-function displayLibrary() {
-  const booksGrid = document.querySelector(".books-grid");
-  booksGrid.innerHTML = "";
-
-  for (let i = 0; i < library.length; i++) {
-    const book = library[i];
-    const bookCard = createBookCard(book, i);
-    booksGrid.appendChild(bookCard);
-  }
-}
-
+// Function to create a book card element
 function createBookCard(book, index) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book-card");
@@ -90,20 +77,7 @@ function createBookCard(book, index) {
   return bookCard;
 }
 
-function updateBookCardStyle(book, bookCard) {
-  if (book.url) {
-    bookCard.style.backgroundImage = `url(${book.url})`;
-    bookCard.style.backgroundSize = "cover";
-    bookCard.style.backgroundRepeat = "no-repeat";
-    bookCard.style.backgroundPosition = "center";
-    bookCard.style.minHeight = "200px";
-  } else {
-    bookCard.style.backgroundImage = "";
-    bookCard.style.backgroundColor = "#ddd";
-    bookCard.style.minHeight = "200px";
-  }
-}
-
+// Function to create the remove book button
 function createRemoveButton(index) {
   const removeBookButton = document.createElement("button");
   removeBookButton.textContent = "Remove Book";
@@ -114,6 +88,7 @@ function createRemoveButton(index) {
   return removeBookButton;
 }
 
+// Function to create the toggle read status button
 function createToggleReadButton(book) {
   const toggleReadStatusButton = document.createElement("button");
   toggleReadStatusButton.textContent = "Toggle Read Status";
@@ -124,6 +99,7 @@ function createToggleReadButton(book) {
   return toggleReadStatusButton;
 }
 
+// Function to create the toggle cover button
 function createRemoveCoverButton(book, bookCard) {
   const removeCoverButton = document.createElement("button");
   removeCoverButton.textContent = "Toggle Cover";
@@ -144,6 +120,40 @@ function createRemoveCoverButton(book, bookCard) {
   return removeCoverButton;
 }
 
+// Function to add a book to the library array
+function addBookToLibrary(title, author, pages, read, coverurl) {
+  let validatedCoverUrl = coverurl;
+
+  if (coverurl !== "") {
+    if (!isValidURL(coverurl)) {
+      alert(
+        "Invalid Book Cover URL. Please enter a valid URL (e.g., http://example.com)"
+      );
+      return;
+    }
+    validatedCoverUrl = coverurl;
+  } else {
+    validatedCoverUrl = "";
+  }
+
+  const uuid = self.crypto.randomUUID();
+  library.push(new Book(title, author, pages, read, validatedCoverUrl, uuid));
+  displayLibrary();
+}
+
+// Function to display the library on the page
+function displayLibrary() {
+  const booksGrid = document.querySelector(".books-grid");
+  booksGrid.innerHTML = "";
+
+  for (let i = 0; i < library.length; i++) {
+    const book = library[i];
+    const bookCard = createBookCard(book, i);
+    booksGrid.appendChild(bookCard);
+  }
+}
+
+// Event listener for the form submission
 document
   .getElementById("bookForm")
   .addEventListener("submit", function (event) {
@@ -163,6 +173,7 @@ document
     document.getElementById("book-cover-url").value = "";
   });
 
+// Initial books for testing
 addBookToLibrary(
   "Merchant of venice",
   "William Shakespeare",
