@@ -23,7 +23,7 @@ bookFormToggleButton.addEventListener("click", () => {
 // Updates the visual style of a book card based on the book's cover image URL
 const updateBookCardVisuals = (book, bookCard) => {
   const overlayOpacity = 0.5;
-  const defaultCoverImage = "sources/matthew-ball-RZMtsUxy97U-unsplash.jpg";
+  const defaultCoverImage = "sources/defaultCover.jpg";
   const lightTextColor = "#f0ead6"; 
   const darkTextColor = "#5e4429"; 
 
