@@ -73,13 +73,12 @@ body {
 }
 
 .books-grid {
-  margin-left: 2.5rem;
+  margin-left: 2.75rem;
   text-align: center;
   display: grid;
   grid-auto-rows: 1fr;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   width: 100%;
-  border: 2px solid #b8860b;
 }
 
 .books-grid h1 {
