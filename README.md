@@ -9,3 +9,7 @@ A simple web library to track your books! Add books with title, author, pages an
 Live Demo - [Live Demo](https://swapnanil1.github.io/OdinProject-Library-Object)
 
 Project Link - [Project Link](https://www.theodinproject.com/lessons/node-path-javascript-library)
+
+# Credits
+
+Cover Image - [Book Spine Unsplash](https://unsplash.com/photos/brown-wooden-board-with-white-background-RZMtsUxy97U)
