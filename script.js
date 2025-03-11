@@ -1,201 +1,219 @@
-const library = [];
+// Array to store book objects
+const bookLibrary = [];
 
-// Function to validate URL format
-function isValidURL(url) {
+// Function to check if a string is a valid URL
+const isStringAValidURL = (string) => {
   try {
-    new URL(url);
+    new URL(string);
     return true;
   } catch (error) {
     return false;
   }
-}
-// Function to display/hide input
+};
 
-let sidebar = document.getElementById("sidebar");
-let form = document.getElementById("bookForm");
+// Get references to the form toggle button and the form itself
+const bookFormToggleButton = document.getElementById("bookFormToggleButton");
+const bookInputForm = document.getElementById("bookInputForm");
 
-sidebar.addEventListener("click", () => {
-  if (form.style.display === "none") {
-    form.style.display = "block";
-  } else {
-    form.style.display = "none";
-  }
+// Event listener to toggle the visibility of the book input form
+bookFormToggleButton.addEventListener("click", () => {
+  bookInputForm.style.display =
+    bookInputForm.style.display === "none" ? "block" : "none";
 });
-function updateBookCardStyle(book, bookCard) {
-  if (book.url) {
-    bookCard.style.color = "#333333";
-    bookCard.style.backgroundImage = `url(${book.url})`;
-    bookCard.style.backgroundSize = "cover";
-    bookCard.style.backgroundRepeat = "no-repeat";
-    bookCard.style.backgroundPosition = "center";
-    bookCard.style.minHeight = "200px";
+// Updates the visual style of a book card based on the book's cover image URL
+const updateBookCardVisuals = (book, bookCard) => {
+  const overlayOpacity = 0.5;
+  const defaultCoverImage = "sources/matthew-ball-RZMtsUxy97U-unsplash.jpg";
+  const lightTextColor = "#f0ead6"; 
+  const darkTextColor = "#5e4429"; 
+
+  if (book.bookCoverImageURL) {
+    // Has a cover image
+    bookCard.style.color = lightTextColor;
+    bookCard.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, ${overlayOpacity}), rgba(0, 0, 0, ${overlayOpacity})), url(${book.bookCoverImageURL})`;
   } else {
-    bookCard.style.color = "black";
-    bookCard.style.backgroundImage = "";
-    bookCard.style.backgroundColor = "#ddd";
-    bookCard.style.minHeight = "200px";
+    // No cover image
+    bookCard.style.color = darkTextColor; 
+    bookCard.style.backgroundImage = `url(${defaultCoverImage})`;
   }
+
+  bookCard.style.backgroundSize = "cover";
+  bookCard.style.backgroundRepeat = "no-repeat";
+  bookCard.style.backgroundPosition = "center";
+  bookCard.style.backgroundColor = "";
+  bookCard.style.minHeight = "200px";
+
+  // Update text color of all h3 and p elements inside bookCard
+  const textElements = bookCard.querySelectorAll("h3, p");
+  textElements.forEach(element => {
+    element.style.color = bookCard.style.color;
+  });
+
+};
+// Book object constructor
+function Book(
+  bookTitle,
+  bookAuthor,
+  bookPages,
+  bookIsRead,
+  bookCoverImageURL,
+  bookUUID = self.crypto.randomUUID()
+) {
+  this.bookTitle = bookTitle;
+  this.bookAuthor = bookAuthor;
+  this.bookPages = bookPages;
+  this.bookIsRead = bookIsRead;
+  this.bookCoverImageURL = bookCoverImageURL;
+  this.bookUUID = bookUUID;
+  this.getBookInfo = () =>
+    `${bookTitle} by ${bookAuthor}, ${bookPages} pages, ${
+      this.bookIsRead ? "Reading Completed" : "Not read yet"
+    }`;
 }
 
-// Factory Function to create a Book object
-function Book(title, author, pages, read, url, uuid) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.url = url;
-  this.uuid = uuid;
-  this.info = function () {
-    const readStatus = this.read ? "Reading Completed" : "Not read yet";
-    return `${title} by ${author}, ${pages} pages , ${readStatus}`;
-  };
-}
-
-// Function to create a book card element
-function createBookCard(book, index) {
+// Creates a new book card element in the grid
+const createNewBookCard = (book, bookIndex) => {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book-card");
 
-  updateBookCardStyle(book, bookCard);
+  const createElementWithText = (elementTag, elementText) => {
+    const newElement = document.createElement(elementTag);
+    newElement.textContent = elementText;
+    return newElement;
+  };
 
-  const titleElement = document.createElement("h3");
-  titleElement.textContent = book.title;
+  const titleElement = createElementWithText("h3", book.bookTitle);
+  const authorElement = createElementWithText("p", `By: ${book.bookAuthor}`);
+  const pagesElement = createElementWithText("p", `Pages: ${book.bookPages}`);
+  const readingStatusElement = createElementWithText(
+    "p",
+    `Status: ${book.bookIsRead ? "Completed" : "Not read yet"}`
+  );
 
-  const authorElement = document.createElement("p");
-  authorElement.textContent = `By: ${book.author}`;
+  const removeBookButton = createRemoveBookButton(bookIndex);
+  const toggleReadStatusButton = createToggleReadStatusButton(book);
+  const toggleCoverButton = createToggleCoverButton(book, bookCard);
 
-  const pagesElement = document.createElement("p");
-  pagesElement.textContent = `Pages: ${book.pages}`;
+  bookCard.append(
+    titleElement,
+    authorElement,
+    pagesElement,
+    readingStatusElement,
+    removeBookButton,
+    toggleCoverButton,
+    toggleReadStatusButton
+  );
 
-  const readingStatusElement = document.createElement("p");
-  readingStatusElement.textContent = book.read
-    ? "Status: Completed"
-    : "Status: Not read yet";
-
-  const removeBookButton = createRemoveButton(index);
-
-  const toggleReadStatusButton = createToggleReadButton(book);
-
-  const removeCoverButton = createRemoveCoverButton(book, bookCard);
-  bookCard.appendChild(removeCoverButton);
-
-  bookCard.appendChild(titleElement);
-  bookCard.appendChild(authorElement);
-  bookCard.appendChild(pagesElement);
-  bookCard.appendChild(readingStatusElement);
-  bookCard.appendChild(removeBookButton);
-  bookCard.appendChild(toggleReadStatusButton);
+  updateBookCardVisuals(book, bookCard); // Apply styles after element creation
 
   return bookCard;
-}
+};
 
-// Function to create the remove book button
-function createRemoveButton(index) {
+// Creates the remove book button
+const createRemoveBookButton = (bookIndex) => {
   const removeBookButton = document.createElement("button");
-  removeBookButton.textContent = "Remove Book";
-  removeBookButton.addEventListener("click", function () {
-    library.splice(index, 1);
-    displayLibrary();
+  removeBookButton.textContent = "Delete Book";
+  removeBookButton.addEventListener("click", () => {
+    bookLibrary.splice(bookIndex, 1);
+    displayAllBooks();
   });
   return removeBookButton;
-}
+};
 
-// Function to create the toggle read status button
-function createToggleReadButton(book) {
+// Creates the toggle read status button
+const createToggleReadStatusButton = (book) => {
   const toggleReadStatusButton = document.createElement("button");
-  toggleReadStatusButton.textContent = "Toggle Read Status";
+  toggleReadStatusButton.textContent = "Mark as Read/Unread"; 
   toggleReadStatusButton.addEventListener("click", () => {
-    book.read = !book.read;
-    displayLibrary();
+    book.bookIsRead = !book.bookIsRead;
+    displayAllBooks();
   });
   return toggleReadStatusButton;
-}
+};
 
-// Function to create the toggle cover button
-function createRemoveCoverButton(book, bookCard) {
-  const removeCoverButton = document.createElement("button");
-  removeCoverButton.textContent = "Toggle Cover";
-
-  removeCoverButton.addEventListener("click", () => {
-    if (book.url) {
-      book.originalUrl = book.url;
-      book.url = "";
+const createToggleCoverButton = (book, bookCard) => {
+  const toggleCoverButton = document.createElement("button");
+  toggleCoverButton.textContent = "Show/Hide Cover"; 
+  toggleCoverButton.addEventListener("click", () => {
+    if (book.bookCoverImageURL) {
+      // If there's a cover, remove it and store it in original
+      book.originalBookCoverImageURL = book.bookCoverImageURL;
+      book.bookCoverImageURL = null; // or ""
     } else {
-      book.url = book.originalUrl || "";
-      delete book.originalUrl;
+      // If there's no cover, restore it from original
+      book.bookCoverImageURL = book.originalBookCoverImageURL || null; // or ""
+      book.originalBookCoverImageURL = null;
     }
-
-    updateBookCardStyle(book, bookCard);
-    displayLibrary();
+    updateBookCardVisuals(book, bookCard);
+    displayAllBooks();
   });
+  return toggleCoverButton;
+};
 
-  return removeCoverButton;
-}
-
-// Function to add a book to the library array
-function addBookToLibrary(title, author, pages, read, coverurl) {
-  let validatedCoverUrl = coverurl;
-
-  if (coverurl !== "") {
-    if (!isValidURL(coverurl)) {
-      alert(
-        "Invalid Book Cover URL. Please enter a valid URL (e.g., http://example.com)"
-      );
-      return;
-    }
-    validatedCoverUrl = coverurl;
-  } else {
-    validatedCoverUrl = "";
+// Adds a new book to the library
+const addBookToBookLibrary = (
+  bookTitle,
+  bookAuthor,
+  bookPages,
+  bookIsRead,
+  bookCoverImageURL
+) => {
+  if (bookCoverImageURL && !isStringAValidURL(bookCoverImageURL)) {
+    alert("Invalid Book Cover URL. Please enter a valid URL.");
+    return;
   }
 
-  const uuid = self.crypto.randomUUID();
-  library.push(new Book(title, author, pages, read, validatedCoverUrl, uuid));
-  displayLibrary();
-}
+  bookLibrary.push(
+    new Book(bookTitle, bookAuthor, bookPages, bookIsRead, bookCoverImageURL)
+  );
+  displayAllBooks();
+};
 
-// Function to display the library on the page
-function displayLibrary() {
+// Displays all books in the library
+const displayAllBooks = () => {
   const booksGrid = document.querySelector(".books-grid");
   booksGrid.innerHTML = "";
-
-  for (let i = 0; i < library.length; i++) {
-    const book = library[i];
-    const bookCard = createBookCard(book, i);
+  bookLibrary.forEach((book, bookIndex) => {
+    const bookCard = createNewBookCard(book, bookIndex);
     booksGrid.appendChild(bookCard);
-  }
-}
-
-// Event listener for the form submission
-document
-  .getElementById("bookForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-    const title = document.getElementById("bookTitle").value;
-    const author = document.getElementById("bookAuthor").value;
-    const pages = document.getElementById("bookPages").value;
-    const read = document.getElementById("bookReadingStatus").checked;
-    const coverUrl = document.getElementById("book-cover-url").value;
-
-    addBookToLibrary(title, author, pages, read, coverUrl);
-
-    document.getElementById("bookTitle").value = "";
-    document.getElementById("bookAuthor").value = "";
-    document.getElementById("bookPages").value = "";
-    document.getElementById("bookReadingStatus").checked = false;
-    document.getElementById("book-cover-url").value = "";
   });
+};
 
-// Initial books for testing
-addBookToLibrary(
-  "Merchant of venice",
+// Form submission event listener
+document.getElementById("bookInputForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const bookTitle = document.getElementById("bookTitleInput").value;
+  const bookAuthor = document.getElementById("bookAuthorInput").value;
+  const bookPages = document.getElementById("bookPagesInput").value;
+  const bookIsRead = document.getElementById(
+    "bookReadingStatusCheckbox"
+  ).checked;
+  const bookCoverImageURL = document.getElementById(
+    "bookCoverImageURLInput"
+  ).value;
+
+  addBookToBookLibrary(
+    bookTitle,
+    bookAuthor,
+    bookPages,
+    bookIsRead,
+    bookCoverImageURL
+  );
+
+  event.target.reset();
+});
+
+// Initial books added for demonstration
+addBookToBookLibrary(
+  "Merchant of Venice",
   "William Shakespeare",
   304,
   true,
   "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781625589507/the-merchant-of-venice-9781625589507_hr.jpg"
 );
-addBookToLibrary(
+addBookToBookLibrary(
   "Rich Dad Poor Dad",
-  "Robert T. Kiyosak",
+  "Robert T. Kiyosaki",
   336,
   true,
   "https://m.media-amazon.com/images/I/51Hfv2MfNGL._SY445_SX342_.jpg"

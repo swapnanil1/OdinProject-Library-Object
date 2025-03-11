@@ -14,47 +14,47 @@
   </head>
   <body>
     <div class="input-section">
-      <div id="sidebar">Toggle Book Drawer</div>
-      <form id="bookForm" class="bookForm">
+      <div id="bookFormToggleButton">Toggle Book Drawer</div>
+      <form id="bookInputForm" class="bookForm">
         <div>
           <h1>Old West Library</h1>
         </div>
         <div class="book-input-form">
-          <label for="bookTitle">Title:</label>
+          <label for="bookTitleInput">Title:</label>
           <input
             type="text"
-            id="bookTitle"
-            name="bookTitle"
+            id="bookTitleInput"
+            name="bookTitleInput"
             placeholder="Enter book title"
           /><br /><br />
 
-          <label for="bookAuthor">By:</label>
+          <label for="bookAuthorInput">By:</label>
           <input
             type="text"
-            id="bookAuthor"
-            name="bookAuthor"
+            id="bookAuthorInput"
+            name="bookAuthorInput"
             placeholder="Enter book author"
           /><br /><br />
 
-          <label for="bookPages">Pages</label>
+          <label for="bookPagesInput">Pages</label>
           <input
             type="number"
-            name="bookPages"
-            id="bookPages"
+            name="bookPagesInput"
+            id="bookPagesInput"
             placeholder="Number of pages"
           />
-          <label for="book-cover-url">Cover Image</label>
+          <label for="bookCoverImageURLInput">Cover Image</label>
           <input
             type="url"
-            name="book-cover-url"
-            id="book-cover-url"
+            name="bookCoverImageURLInput"
+            id="bookCoverImageURLInput"
             placeholder="No image"
           />
-          <label for="bookReadingStatus">Completed</label>
+          <label for="bookReadingStatusCheckbox">Completed</label>
           <input
             type="checkbox"
-            name="bookReadingStatus"
-            id="bookReadingStatus"
+            name="bookReadingStatusCheckbox"
+            id="bookReadingStatusCheckbox"
           />
         </div>
         <button type="submit">Add to library</button>
