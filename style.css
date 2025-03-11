@@ -15,15 +15,39 @@ body {
   font-style: normal;
   font-size: 16px;
 }
+#sidebar {
+  width: 3rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f0ead6;
+  color: #5e4429;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+}
+
+.bookForm {
+  padding-left: 4rem;
+  display: none;
+}
 
 .input-section {
-  padding-left: 2rem;
-  padding-right: 2rem;
   font-size: 2rem;
   background-color: rgba(255, 255, 240, 0.7);
   color: #333;
+  display: flex;
+  flex-direction: row;
 }
-
 .input-section h1 {
   margin-top: 0;
   margin-bottom: 2rem;
@@ -48,12 +72,12 @@ body {
 }
 
 .books-grid {
+  margin-left: 2.5rem;
   text-align: center;
   display: grid;
   grid-auto-rows: 1fr;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
+  /* gap: 1rem; */
   width: 100%;
   border: 2px solid #b8860b;
 }

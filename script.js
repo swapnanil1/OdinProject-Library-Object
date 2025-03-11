@@ -9,16 +9,28 @@ function isValidURL(url) {
     return false;
   }
 }
+// Function to display/hide input
 
-// Function to update the book card style based on cover image URL
+let sidebar = document.getElementById("sidebar");
+let form = document.getElementById("bookForm");
+
+sidebar.addEventListener("click", () => {
+  if (form.style.display === "none") {
+    form.style.display = "block";
+  } else {
+    form.style.display = "none";
+  }
+});
 function updateBookCardStyle(book, bookCard) {
   if (book.url) {
+    bookCard.style.color = "#333333";
     bookCard.style.backgroundImage = `url(${book.url})`;
     bookCard.style.backgroundSize = "cover";
     bookCard.style.backgroundRepeat = "no-repeat";
     bookCard.style.backgroundPosition = "center";
     bookCard.style.minHeight = "200px";
   } else {
+    bookCard.style.color = "black";
     bookCard.style.backgroundImage = "";
     bookCard.style.backgroundColor = "#ddd";
     bookCard.style.minHeight = "200px";
