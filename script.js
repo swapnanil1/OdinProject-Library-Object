@@ -24,8 +24,8 @@ bookFormToggleButton.addEventListener("click", () => {
 const updateBookCardVisuals = (book, bookCard) => {
   const overlayOpacity = 0.5;
   const defaultCoverImage = "sources/defaultCover.jpg";
-  const lightTextColor = "#f0ead6"; 
-  const darkTextColor = "#5e4429"; 
+  const lightTextColor = "#f0ead6";
+  const darkTextColor = "#5e4429";
 
   if (book.bookCoverImageURL) {
     // Has a cover image
@@ -33,7 +33,7 @@ const updateBookCardVisuals = (book, bookCard) => {
     bookCard.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, ${overlayOpacity}), rgba(0, 0, 0, ${overlayOpacity})), url(${book.bookCoverImageURL})`;
   } else {
     // No cover image
-    bookCard.style.color = darkTextColor; 
+    bookCard.style.color = darkTextColor;
     bookCard.style.backgroundImage = `url(${defaultCoverImage})`;
   }
 
@@ -45,30 +45,32 @@ const updateBookCardVisuals = (book, bookCard) => {
 
   // Update text color of all h3 and p elements inside bookCard
   const textElements = bookCard.querySelectorAll("h3, p");
-  textElements.forEach(element => {
+  textElements.forEach((element) => {
     element.style.color = bookCard.style.color;
   });
-
 };
-// Book object constructor
-function Book(
-  bookTitle,
-  bookAuthor,
-  bookPages,
-  bookIsRead,
-  bookCoverImageURL,
-  bookUUID = self.crypto.randomUUID()
-) {
-  this.bookTitle = bookTitle;
-  this.bookAuthor = bookAuthor;
-  this.bookPages = bookPages;
-  this.bookIsRead = bookIsRead;
-  this.bookCoverImageURL = bookCoverImageURL;
-  this.bookUUID = bookUUID;
-  this.getBookInfo = () =>
-    `${bookTitle} by ${bookAuthor}, ${bookPages} pages, ${
+// Book class
+class Book {
+  constructor(
+    bookTitle,
+    bookAuthor,
+    bookPages,
+    bookIsRead,
+    bookCoverImageURL,
+    bookUUID = self.crypto.randomUUID()
+  ) {
+    this.bookTitle = bookTitle;
+    this.bookAuthor = bookAuthor;
+    this.bookPages = bookPages;
+    this.bookIsRead = bookIsRead;
+    this.bookCoverImageURL = bookCoverImageURL;
+    this.bookUUID = bookUUID;
+  }
+  getBookInfo() {
+    return `${bookTitle} by ${bookAuthor}, ${bookPages} pages, ${
       this.bookIsRead ? "Reading Completed" : "Not read yet"
     }`;
+  }
 }
 
 // Creates a new book card element in the grid
@@ -123,7 +125,7 @@ const createRemoveBookButton = (bookIndex) => {
 // Creates the toggle read status button
 const createToggleReadStatusButton = (book) => {
   const toggleReadStatusButton = document.createElement("button");
-  toggleReadStatusButton.textContent = "Mark as Read/Unread"; 
+  toggleReadStatusButton.textContent = "Mark as Read/Unread";
   toggleReadStatusButton.addEventListener("click", () => {
     book.bookIsRead = !book.bookIsRead;
     displayAllBooks();
@@ -133,7 +135,7 @@ const createToggleReadStatusButton = (book) => {
 
 const createToggleCoverButton = (book, bookCard) => {
   const toggleCoverButton = document.createElement("button");
-  toggleCoverButton.textContent = "Show/Hide Cover"; 
+  toggleCoverButton.textContent = "Show/Hide Cover";
   toggleCoverButton.addEventListener("click", () => {
     if (book.bookCoverImageURL) {
       // If there's a cover, remove it and store it in original
