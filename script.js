@@ -67,7 +67,7 @@ class Book {
     this.bookUUID = bookUUID;
   }
   getBookInfo() {
-    return `${bookTitle} by ${bookAuthor}, ${bookPages} pages, ${
+    return `${this.bookTitle} by ${this.bookAuthor}, ${this.bookPages} pages, ${
       this.bookIsRead ? "Reading Completed" : "Not read yet"
     }`;
   }
