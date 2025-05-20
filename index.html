@@ -26,6 +26,7 @@
             id="bookTitleInput"
             name="bookTitleInput"
             placeholder="Enter book title"
+            required
           /><br /><br />
 
           <label for="bookAuthorInput">By:</label>
@@ -34,6 +35,7 @@
             id="bookAuthorInput"
             name="bookAuthorInput"
             placeholder="Enter book author"
+            required
           /><br /><br />
 
           <label for="bookPagesInput">Pages</label>
@@ -42,6 +44,8 @@
             name="bookPagesInput"
             id="bookPagesInput"
             placeholder="Number of pages"
+            min="0"
+            required
           />
           <label for="bookCoverImageURLInput">Cover Image</label>
           <input
@@ -55,6 +59,7 @@
             type="checkbox"
             name="bookReadingStatusCheckbox"
             id="bookReadingStatusCheckbox"
+            required
           />
         </div>
         <button type="submit">Add to library</button>
